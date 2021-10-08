@@ -16,6 +16,10 @@ export class UserService {
         private readonly userRepository: Repository<UserEntity>
     ) {}
 
+    findUserById(id: number): Promise<UserEntity> {
+        return this.userRepository.findOne(id);
+    }
+
     async create(createUserDto: CreateUserDto): Promise<UserEntity> {
         const userByEmail = await this.userRepository.findOne({
             email: createUserDto.email,
@@ -88,13 +92,5 @@ export class UserService {
                 token: this.generateJwt(user),
             },
         };
-    }
-
-    findAll() {
-        return `This action returns all user`;
-    }
-
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
     }
 }
