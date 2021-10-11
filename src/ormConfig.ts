@@ -1,6 +1,7 @@
 import { ConnectionOptions } from 'typeorm';
 import { TagEntity } from './tag/tag.entity';
 import { UserEntity } from './user/user.entity';
+import { ArticleEntity } from './article/article.entity';
 
 const config: ConnectionOptions = {
     type: 'postgres',
@@ -9,7 +10,7 @@ const config: ConnectionOptions = {
     username: 'mediumcloneuser',
     password: '8848',
     database: 'mediumclone',
-    entities: [TagEntity, UserEntity],
+    entities: [TagEntity, UserEntity, ArticleEntity],
     synchronize: false,
     migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
     cli: {
