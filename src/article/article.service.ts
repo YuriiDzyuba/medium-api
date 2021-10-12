@@ -31,6 +31,30 @@ export class ArticleService {
         return await this.articleRepository.save(article);
     }
 
+    async updateArticle(
+        slug: string,
+        updateArticleDto: CreateArticleDto,
+        currentUserId: number
+    ): Promise<ArticleEntity> {
+        const article = await this.findBySlug(slug);
+
+        if (!article) {
+            throw new HttpException(
+                "article doesn't exist",
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        if (article.author.id !== currentUserId) {
+            throw new HttpException('access denied ', HttpStatus.FORBIDDEN);
+        }
+
+        return await this.articleRepository.save({
+            ...article,
+            ...updateArticleDto,
+        });
+    }
+
     async findBySlug(slug: string): Promise<ArticleEntity> {
         return await this.articleRepository.findOne({ slug });
     }
