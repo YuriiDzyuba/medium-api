@@ -7,7 +7,6 @@ import { DeleteResult, getRepository, Repository } from 'typeorm';
 import { ArticleResponseInterface } from './types/articleResponse.interface';
 import slugify from 'slugify';
 import { ArticlesResponseInterface } from './types/articlesResponse.interface';
-import e from 'express';
 
 @Injectable()
 export class ArticleService {
@@ -48,6 +47,8 @@ export class ArticleService {
                 },
                 { relations: ['favorites'] }
             );
+
+            console.log(author, 'author');
             const ids = author.favorites.map((el) => el.id);
 
             if (ids.length > 0) {
@@ -69,7 +70,7 @@ export class ArticleService {
 
         let favoriteIds: number[] = [];
 
-        if (favoriteIds) {
+        if (currentUserId) {
             const currentUser = await this.userRepository.findOne(
                 currentUserId,
                 { relations: ['favorites'] }
@@ -79,6 +80,7 @@ export class ArticleService {
 
         const articles = await queryBuilder.getMany();
         const articlesCount = await queryBuilder.getCount();
+
         const articlesWithFavorites = articles.map((article) => {
             const favorited = favoriteIds.includes(article.id);
             return { ...article, favorited };
